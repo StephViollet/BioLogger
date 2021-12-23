@@ -16,7 +16,7 @@ The Arduino code for the Nina33 board is provided: nano33_SD_IMU_BLE_4_2_logger1
 The Adafruit adalogger board was connected though a custom-made connection board to the Nina board:
 https://www.adafruit.com/product/2922
 
-The CAD file of the connection board is provided.
+The CAD Eagle file of the connection board is provided.
 
 The attitude estimation is implemented on the basis of the Seb Madgwick's algorithm: 
 https://ieeexplore.ieee.org/abstract/document/5975346
