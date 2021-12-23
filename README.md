@@ -29,7 +29,9 @@ https://github.com/FemmeVerbeek/Arduino_LSM9DS1
 Once connected to the logger :
 - To trig the logger : send an "A" (hex 41) either through Bluetooth or UART link
 - To stop the logger : send a "Z" (hex 5A) either through Bluetooth or UART link
-- To read the Euler angles use as an example the Python sript for Linux : bleak_loggerOK 2.py
+- To read the Euler angles use as an example the Python sript for Linux : bleak_loggerOK 2.py. Please install the bleak BLe client for python:
+https://github.com/hbldh/bleak
+
 The Euler angles are send via BLE link automatically ervery time a read event is generated. So it is only necessary to read the logger to receive the Euler angle values.
 
 ## If you think to use the Biologger arduino code for your project please cite this paper:
