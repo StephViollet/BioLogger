@@ -1,12 +1,12 @@
 /* Dépendances */
 #include <Arduino_LSM9DS1.h> //IMU
-#include <MadgwickAHRS.h>
-#include <SPI.h> // Pour la communication SPI
-#include <SD.h>  // Pour la communication avec la carte SD
-#include <ArduinoBLE.h> // Pour la communication BLE
-#include "RTClib.h"
+#include <MadgwickAHRS.h> // Euler angle estimation
+#include <SPI.h> // SPI communication 
+#include <SD.h>  // SD communication 
+#include <ArduinoBLE.h> // Bluetooth BLE communication 
+#include "RTClib.h" // RTC (real time clock circuit) communication
 
-/** Variable à sauivegarder sur SD */
+/** Variables to be saved on the SD card */
 float ax,ay,az;
 float gx, gy, gz;
 float mx, my, mz;
@@ -24,13 +24,13 @@ int compteur  = 0;
 
 //const int ledPin = LED_BUILTIN; // pin to use for the LED
 
-/** Broche CS de la carte SD */
+/** Pin CS SD card */
 const byte SDCARD_CS_PIN = 10; // A remplacer suivant votre shield SD
 
-/** Nom du fichier de sortie */
+/** Output file Name */
 //const char* OUTPUT_FILENAME = "data.csv";
 
-/** Delai entre deux prises de mesures(ms) */
+/** Time between two samples(ms) */
 //unsigned long microsPerReading, microsPrevious;
 //unsigned long microsNow;
 unsigned long millisPerReading, millisPrevious;
@@ -38,7 +38,7 @@ unsigned long millisNow;
 float Angles[3];
 float Angles_null[3];
 
-/** Fichier de sortie avec les mesures */
+/** Output file  */
 File file;
 
 /** Config RTC */
@@ -79,13 +79,13 @@ void dateTime(uint16_t* date, uint16_t* time) {
 
 void setup() {
   
-/* Initialisation du port série (debug) */
+/* Initialisation serial port (debug) */
   Serial.begin(9600);
 
-  /* Initialisation du port SPI */
+  /* Initialisation SPI port */
   //pinMode(ledPin, OUTPUT);
 
-  /* Initialisation de la carte SD */
+  /* Initialisation SD card */
   Serial.println(F("Initialisation de la carte SD ... "));
   if (!SD.begin(SDCARD_CS_PIN)) {
     Serial.println(F("Erreur : Impossible d'initialiser la carte SD"));
@@ -99,13 +99,13 @@ if (! rtc.begin()) {
     while (1);
   }
 
-  // Sert à écrire un fichier à la bonne date et bonne heure
+  // Used to write a file with correct time and date
   // set date time callback function
  SdFile::dateTimeCallback(dateTime); 
 
   if (! rtc.initialized()) {
     Serial.println("RTC is NOT running!");
-    //Sert à mettre à l'heure du PC si uncomment
+    //If uncomment used to set the time from the PC
     //rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); 
   }
 
@@ -263,7 +263,7 @@ void loop() {
   }
 }
 
-/** Fonction de mesure - à personnaliser selon ses besoins */
+/** Data acquisition function */
 void writeSD() {
 /* Enregistre les données sur la carte SD */
   file.print(millisPrevious);
@@ -293,7 +293,7 @@ void writeSD() {
   file.print(Angles[2]); //Yaw
   file.println(F("; "));
 
-  /* Virer Flush : prend trop de temps */
+  /*  Flush : takes too much time */
   //file.flush();
   
   }
@@ -308,7 +308,7 @@ void create_file() {
 
   String filename = hour + "-" + minute + "-" + second + ".CSV";
   
-/* Ouvre le fichier de sortie en écriture */
+/* Open the output file to be written */
   Serial.println(F("Ouverture du fichier de sortie ... "));
   file = SD.open(filename, FILE_WRITE);
   if (!file) {
@@ -317,7 +317,7 @@ void create_file() {
     for (;;); // Attend appui sur bouton RESET
   }
 
-  /* Ajoute l'entête CSV si le fichier est vide */
+  /* If emply file add CSV header */
   if (file.size() == 0) {
     Serial.println(F("Ecriture de l'entete CSV ..."));
     file.println(F("Time; Acc X; Acc Y; Acc Z; Gx; Gy; Gz; Mx; My; Mz; Roll; Pitch; Head"));
@@ -364,14 +364,14 @@ void LoggerWriteWritten(BLEDevice central, BLECharacteristic characteristic) {
   LoggerWrite.readValue(var_state);
   //Serial.println(var_state);
   
-// 65 dec : 41 en hex : lettre A ASCII
+// 65 dec : 41 en hex : letter A ASCII
   if (var_state == 65) {
     //Serial.println("TRIG on");
     trig_BLE = true;
     //digitalWrite(ledPin, HIGH);
   } 
 
-//  90 dec : 5A en hex : Lettre Z ASCII
+//  90 dec : 5A en hex : Letter Z ASCII
   if (var_state == 90) {
     //Serial.println("TRIG off");
     trig_BLE = false;
