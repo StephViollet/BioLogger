@@ -24,6 +24,22 @@ https://ieeexplore.ieee.org/abstract/document/5975346
 The calibration was done by using this method:
 https://github.com/FemmeVerbeek/Arduino_LSM9DS1
 
+## Required libraries
+
+Install board Arduino Nano33 BLE
+
+Library for the IMU LSM9DS1 (much better than the Arduino library):
+https://github.com/FemmeVerbeek/Arduino_LSM9DS1
+
+Aduino BLE library:
+https://www.arduino.cc/en/Reference/ArduinoBLE
+
+Madgwick AHRS for attitude estimation(pitch, roll and yaw):
+https://github.com/arduino-libraries/MadgwickAHRS
+
+RTClib adafruit for the real time clock circuit PCF8523:
+https://github.com/adafruit/RTClib
+
 ## How to communicate with the logger
 
 Once connected to the logger :
